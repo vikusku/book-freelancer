@@ -7,7 +7,6 @@ import (
 )
 
 var host, port = "localhost", "7777"
-var isPgEnabled = true
 
 func Run() {
 	router := gin.Default()
@@ -15,12 +14,8 @@ func Run() {
 
 	endpoint := host + ":" + port
 
-
-	if isPgEnabled {
-		log.Printf("connect to http://%s/ for GraphQL playground", endpoint)
-		router.GET("/", handler.Playground("/query"))
-	}
-
+	log.Printf("connect to http://%s/ for GraphQL playground", endpoint)
+	router.GET("/", handler.Playground("/query"))
 	router.POST("/query", handler.QueryHandler())
 
 	err := router.Run(endpoint)

@@ -4,8 +4,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
-	"github.com/vikusku/book-freelancer/internal/gql/generated"
-	"github.com/vikusku/book-freelancer/internal/gql/resolver"
+	"github.com/vikusku/book-freelancer/internal/graph"
+	"github.com/vikusku/book-freelancer/internal/graph/generated"
 	"log"
 )
 
@@ -15,7 +15,7 @@ type Person struct {
 }
 
 func QueryHandler() gin.HandlerFunc {
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{}}))
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
 	return func(c *gin.Context) {
 		log.Println("query handler")

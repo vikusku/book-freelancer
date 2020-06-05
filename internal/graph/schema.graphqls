@@ -1,0 +1,43 @@
+type Appointment {
+  id: ID!
+  description: String!
+  time: DateTime!
+  user: User!
+}
+
+type User {
+  id: ID!
+  fistName: String!
+  lastName: String!
+}
+
+type DateTime {
+  date: String!
+  start: String!
+  end: String!
+}
+
+type Query {
+  appointment(id: ID!): Appointment
+}
+
+input NewAppointment {
+  description: String!
+  time: DateTimeInput!
+  user: UserInput!
+}
+
+input DateTimeInput {
+  date: String!
+  start: String!
+  end: String!
+}
+
+input UserInput {
+  fistName: String!
+  lastName: String!
+}
+
+type Mutation {
+  createAppointment(input: NewAppointment!): Appointment!
+}
