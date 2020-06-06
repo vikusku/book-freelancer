@@ -13,7 +13,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
-	"github.com/vikusku/book-freelancer/internal/graph/model"
+	"github.com/vikusku/book-freelancer/internal/graph/graphqlmodel"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -56,7 +56,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateAppointment func(childComplexity int, input model.NewAppointment) int
+		CreateAppointment func(childComplexity int, input graphqlmodel.NewAppointment) int
 	}
 
 	Query struct {
@@ -64,17 +64,17 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		FistName func(childComplexity int) int
-		ID       func(childComplexity int) int
-		LastName func(childComplexity int) int
+		FirstName func(childComplexity int) int
+		ID        func(childComplexity int) int
+		LastName  func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	CreateAppointment(ctx context.Context, input model.NewAppointment) (*model.Appointment, error)
+	CreateAppointment(ctx context.Context, input graphqlmodel.NewAppointment) (*graphqlmodel.Appointment, error)
 }
 type QueryResolver interface {
-	Appointment(ctx context.Context, id string) (*model.Appointment, error)
+	Appointment(ctx context.Context, id string) (*graphqlmodel.Appointment, error)
 }
 
 type executableSchema struct {
@@ -151,7 +151,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAppointment(childComplexity, args["input"].(model.NewAppointment)), true
+		return e.complexity.Mutation.CreateAppointment(childComplexity, args["input"].(graphqlmodel.NewAppointment)), true
 
 	case "Query.appointment":
 		if e.complexity.Query.Appointment == nil {
@@ -165,12 +165,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Appointment(childComplexity, args["id"].(string)), true
 
-	case "User.fistName":
-		if e.complexity.User.FistName == nil {
+	case "User.firstName":
+		if e.complexity.User.FirstName == nil {
 			break
 		}
 
-		return e.complexity.User.FistName(childComplexity), true
+		return e.complexity.User.FirstName(childComplexity), true
 
 	case "User.id":
 		if e.complexity.User.ID == nil {
@@ -259,7 +259,7 @@ var sources = []*ast.Source{
 
 type User {
   id: ID!
-  fistName: String!
+  firstName: String!
   lastName: String!
 }
 
@@ -286,7 +286,7 @@ input DateTimeInput {
 }
 
 input UserInput {
-  fistName: String!
+  firstName: String!
   lastName: String!
 }
 
@@ -303,9 +303,9 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Mutation_createAppointment_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.NewAppointment
+	var arg0 graphqlmodel.NewAppointment
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐNewAppointment(ctx, tmp)
+		arg0, err = ec.unmarshalNNewAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐNewAppointment(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -378,7 +378,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Appointment_id(ctx context.Context, field graphql.CollectedField, obj *model.Appointment) (ret graphql.Marshaler) {
+func (ec *executionContext) _Appointment_id(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.Appointment) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -412,7 +412,7 @@ func (ec *executionContext) _Appointment_id(ctx context.Context, field graphql.C
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Appointment_description(ctx context.Context, field graphql.CollectedField, obj *model.Appointment) (ret graphql.Marshaler) {
+func (ec *executionContext) _Appointment_description(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.Appointment) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -446,7 +446,7 @@ func (ec *executionContext) _Appointment_description(ctx context.Context, field 
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Appointment_time(ctx context.Context, field graphql.CollectedField, obj *model.Appointment) (ret graphql.Marshaler) {
+func (ec *executionContext) _Appointment_time(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.Appointment) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -475,12 +475,12 @@ func (ec *executionContext) _Appointment_time(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.DateTime)
+	res := resTmp.(*graphqlmodel.DateTime)
 	fc.Result = res
-	return ec.marshalNDateTime2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐDateTime(ctx, field.Selections, res)
+	return ec.marshalNDateTime2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐDateTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Appointment_user(ctx context.Context, field graphql.CollectedField, obj *model.Appointment) (ret graphql.Marshaler) {
+func (ec *executionContext) _Appointment_user(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.Appointment) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -509,12 +509,12 @@ func (ec *executionContext) _Appointment_user(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.User)
+	res := resTmp.(*graphqlmodel.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐUser(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _DateTime_date(ctx context.Context, field graphql.CollectedField, obj *model.DateTime) (ret graphql.Marshaler) {
+func (ec *executionContext) _DateTime_date(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.DateTime) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -548,7 +548,7 @@ func (ec *executionContext) _DateTime_date(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _DateTime_start(ctx context.Context, field graphql.CollectedField, obj *model.DateTime) (ret graphql.Marshaler) {
+func (ec *executionContext) _DateTime_start(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.DateTime) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -582,7 +582,7 @@ func (ec *executionContext) _DateTime_start(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _DateTime_end(ctx context.Context, field graphql.CollectedField, obj *model.DateTime) (ret graphql.Marshaler) {
+func (ec *executionContext) _DateTime_end(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.DateTime) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -640,7 +640,7 @@ func (ec *executionContext) _Mutation_createAppointment(ctx context.Context, fie
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAppointment(rctx, args["input"].(model.NewAppointment))
+		return ec.resolvers.Mutation().CreateAppointment(rctx, args["input"].(graphqlmodel.NewAppointment))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -652,9 +652,9 @@ func (ec *executionContext) _Mutation_createAppointment(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Appointment)
+	res := resTmp.(*graphqlmodel.Appointment)
 	fc.Result = res
-	return ec.marshalNAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐAppointment(ctx, field.Selections, res)
+	return ec.marshalNAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐAppointment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_appointment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -690,9 +690,9 @@ func (ec *executionContext) _Query_appointment(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.Appointment)
+	res := resTmp.(*graphqlmodel.Appointment)
 	fc.Result = res
-	return ec.marshalOAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐAppointment(ctx, field.Selections, res)
+	return ec.marshalOAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐAppointment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -764,7 +764,7 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -798,7 +798,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_fistName(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -815,7 +815,7 @@ func (ec *executionContext) _User_fistName(ctx context.Context, field graphql.Co
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.FistName, nil
+		return obj.FirstName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -832,7 +832,7 @@ func (ec *executionContext) _User_fistName(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.CollectedField, obj *graphqlmodel.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1921,8 +1921,8 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputDateTimeInput(ctx context.Context, obj interface{}) (model.DateTimeInput, error) {
-	var it model.DateTimeInput
+func (ec *executionContext) unmarshalInputDateTimeInput(ctx context.Context, obj interface{}) (graphqlmodel.DateTimeInput, error) {
+	var it graphqlmodel.DateTimeInput
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -1951,8 +1951,8 @@ func (ec *executionContext) unmarshalInputDateTimeInput(ctx context.Context, obj
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputNewAppointment(ctx context.Context, obj interface{}) (model.NewAppointment, error) {
-	var it model.NewAppointment
+func (ec *executionContext) unmarshalInputNewAppointment(ctx context.Context, obj interface{}) (graphqlmodel.NewAppointment, error) {
+	var it graphqlmodel.NewAppointment
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -1965,13 +1965,13 @@ func (ec *executionContext) unmarshalInputNewAppointment(ctx context.Context, ob
 			}
 		case "time":
 			var err error
-			it.Time, err = ec.unmarshalNDateTimeInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐDateTimeInput(ctx, v)
+			it.Time, err = ec.unmarshalNDateTimeInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐDateTimeInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "user":
 			var err error
-			it.User, err = ec.unmarshalNUserInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐUserInput(ctx, v)
+			it.User, err = ec.unmarshalNUserInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐUserInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1981,15 +1981,15 @@ func (ec *executionContext) unmarshalInputNewAppointment(ctx context.Context, ob
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj interface{}) (model.UserInput, error) {
-	var it model.UserInput
+func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj interface{}) (graphqlmodel.UserInput, error) {
+	var it graphqlmodel.UserInput
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
 		switch k {
-		case "fistName":
+		case "firstName":
 			var err error
-			it.FistName, err = ec.unmarshalNString2string(ctx, v)
+			it.FirstName, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2015,7 +2015,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 
 var appointmentImplementors = []string{"Appointment"}
 
-func (ec *executionContext) _Appointment(ctx context.Context, sel ast.SelectionSet, obj *model.Appointment) graphql.Marshaler {
+func (ec *executionContext) _Appointment(ctx context.Context, sel ast.SelectionSet, obj *graphqlmodel.Appointment) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, appointmentImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2057,7 +2057,7 @@ func (ec *executionContext) _Appointment(ctx context.Context, sel ast.SelectionS
 
 var dateTimeImplementors = []string{"DateTime"}
 
-func (ec *executionContext) _DateTime(ctx context.Context, sel ast.SelectionSet, obj *model.DateTime) graphql.Marshaler {
+func (ec *executionContext) _DateTime(ctx context.Context, sel ast.SelectionSet, obj *graphqlmodel.DateTime) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, dateTimeImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2166,7 +2166,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 
 var userImplementors = []string{"User"}
 
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *graphqlmodel.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2180,8 +2180,8 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "fistName":
-			out.Values[i] = ec._User_fistName(ctx, field, obj)
+		case "firstName":
+			out.Values[i] = ec._User_firstName(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -2446,11 +2446,11 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v model.Appointment) graphql.Marshaler {
+func (ec *executionContext) marshalNAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v graphqlmodel.Appointment) graphql.Marshaler {
 	return ec._Appointment(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v *model.Appointment) graphql.Marshaler {
+func (ec *executionContext) marshalNAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v *graphqlmodel.Appointment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -2474,11 +2474,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNDateTime2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐDateTime(ctx context.Context, sel ast.SelectionSet, v model.DateTime) graphql.Marshaler {
+func (ec *executionContext) marshalNDateTime2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐDateTime(ctx context.Context, sel ast.SelectionSet, v graphqlmodel.DateTime) graphql.Marshaler {
 	return ec._DateTime(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *model.DateTime) graphql.Marshaler {
+func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *graphqlmodel.DateTime) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -2488,15 +2488,15 @@ func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋvikuskuᚋbookᚑ
 	return ec._DateTime(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNDateTimeInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐDateTimeInput(ctx context.Context, v interface{}) (model.DateTimeInput, error) {
+func (ec *executionContext) unmarshalNDateTimeInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐDateTimeInput(ctx context.Context, v interface{}) (graphqlmodel.DateTimeInput, error) {
 	return ec.unmarshalInputDateTimeInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNDateTimeInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐDateTimeInput(ctx context.Context, v interface{}) (*model.DateTimeInput, error) {
+func (ec *executionContext) unmarshalNDateTimeInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐDateTimeInput(ctx context.Context, v interface{}) (*graphqlmodel.DateTimeInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalNDateTimeInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐDateTimeInput(ctx, v)
+	res, err := ec.unmarshalNDateTimeInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐDateTimeInput(ctx, v)
 	return &res, err
 }
 
@@ -2514,7 +2514,7 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐNewAppointment(ctx context.Context, v interface{}) (model.NewAppointment, error) {
+func (ec *executionContext) unmarshalNNewAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐNewAppointment(ctx context.Context, v interface{}) (graphqlmodel.NewAppointment, error) {
 	return ec.unmarshalInputNewAppointment(ctx, v)
 }
 
@@ -2532,11 +2532,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v graphqlmodel.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *graphqlmodel.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -2546,15 +2546,15 @@ func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfree
 	return ec._User(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNUserInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐUserInput(ctx context.Context, v interface{}) (model.UserInput, error) {
+func (ec *executionContext) unmarshalNUserInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐUserInput(ctx context.Context, v interface{}) (graphqlmodel.UserInput, error) {
 	return ec.unmarshalInputUserInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNUserInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐUserInput(ctx context.Context, v interface{}) (*model.UserInput, error) {
+func (ec *executionContext) unmarshalNUserInput2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐUserInput(ctx context.Context, v interface{}) (*graphqlmodel.UserInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalNUserInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐUserInput(ctx, v)
+	res, err := ec.unmarshalNUserInput2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐUserInput(ctx, v)
 	return &res, err
 }
 
@@ -2784,11 +2784,11 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v model.Appointment) graphql.Marshaler {
+func (ec *executionContext) marshalOAppointment2githubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v graphqlmodel.Appointment) graphql.Marshaler {
 	return ec._Appointment(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v *model.Appointment) graphql.Marshaler {
+func (ec *executionContext) marshalOAppointment2ᚖgithubᚗcomᚋvikuskuᚋbookᚑfreelancerᚋinternalᚋgraphᚋgraphqlmodelᚐAppointment(ctx context.Context, sel ast.SelectionSet, v *graphqlmodel.Appointment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

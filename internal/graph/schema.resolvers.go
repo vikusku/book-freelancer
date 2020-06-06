@@ -5,31 +5,52 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"log"
+	"strconv"
 
+	"github.com/jinzhu/gorm"
 	"github.com/vikusku/book-freelancer/internal/graph/generated"
-	"github.com/vikusku/book-freelancer/internal/graph/model"
+	"github.com/vikusku/book-freelancer/internal/graph/graphqlmodel"
+	"github.com/vikusku/book-freelancer/internal/orm"
+	"github.com/vikusku/book-freelancer/internal/orm/ormmodel"
 )
 
-func (r *mutationResolver) CreateAppointment(ctx context.Context, input model.NewAppointment) (*model.Appointment, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) CreateAppointment(ctx context.Context, input graphqlmodel.NewAppointment) (*graphqlmodel.Appointment, error) {
+	res := r.DbConnection.Create(orm.GraphqlToDb(input))
+
+	if res.Error != nil {
+		return &graphqlmodel.Appointment{}, res.Error
+	}
+
+	if dbValue, ok := res.Value.(*ormmodel.Appointment); ok {
+		return orm.DbToGraphql(dbValue), nil
+	} else {
+		return &graphqlmodel.Appointment{}, errors.New("INTERNAL_SERVER_ERROR")
+	}
 }
 
-func (r *queryResolver) Appointment(ctx context.Context, id string) (*model.Appointment, error) {
-	return &model.Appointment{
-		ID:          "0100",
-		Description: "change tires",
-		Time: &model.DateTime{
-			Date:  "2020-05-06",
-			Start: "12:00",
-			End:   "12:30",
-		},
-		User: &model.User{
-			ID:       "31423",
-			FistName: "Foo",
-			LastName: "Bar",
-		},
-	}, nil
+func (r *queryResolver) Appointment(ctx context.Context, id string) (a *graphqlmodel.Appointment, err error) {
+	var parsedId uint64
+
+	if parsedId, err = strconv.ParseUint(id, 10, 32); err != nil {
+		log.Println("Failed to parse id")
+		return nil, errors.New("INTERNAL_SERVER_ERROR")
+	}
+
+	var ap ormmodel.Appointment
+	res := r.DbConnection.Set("gorm:auto_preload", true).First(&ap, uint32(parsedId))
+
+	if err := res.Error; err == gorm.ErrRecordNotFound {
+		return &graphqlmodel.Appointment{}, fmt.Errorf("appointment for id %s not found", id)
+	}
+
+	if dbValue, ok := res.Value.(*ormmodel.Appointment); ok {
+		return orm.DbToGraphql(dbValue), nil
+	} else {
+		return &graphqlmodel.Appointment{}, errors.New("INTERNAL_SERVER_ERROR")
+	}
 }
 
 // Mutation returns generated.MutationResolver implementation.
