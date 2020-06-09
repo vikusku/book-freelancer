@@ -1,20 +1,39 @@
 package orm
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/vikusku/book-freelancer/internal/orm/ormmodel"
+	"github.com/vikusku/book-freelancer/internal/secretmanager"
 	"log"
 )
 
-// Replace with actual values
-var dbUsername, dbPassword, dbName = "username", "password", "dbname"
+type dbCredentials struct {
+	Username string
+	Password string
+	Engine string
+	Host string
+	Port string
+	DbName string
+}
 
 func OpenDB() *gorm.DB{
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dbUsername, dbPassword, dbName))
+	secretValue, err := secretmanager.GetSecretValue("db_credentials")
 	if err != nil {
-		log.Fatalln(err)
+		panic(err)
+	}
+
+	var credentials dbCredentials
+	err = json.Unmarshal([]byte(secretValue), &credentials)
+	if err != nil {
+		panic(err)
+	}
+
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", credentials.Username, credentials.Password, credentials.DbName))
+	if err != nil {
+		panic(err)
 	}
 
 	log.Println("Opened DB connection")

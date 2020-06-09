@@ -10,11 +10,6 @@ import (
 	"log"
 )
 
-type Person struct {
-	Name string
-	Age int
-}
-
 func QueryHandler(dbConnection *gorm.DB) gin.HandlerFunc {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(
 		generated.Config{
