@@ -31,7 +31,7 @@ func OpenDB() *gorm.DB{
 		panic(err)
 	}
 
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", credentials.Username, credentials.Password, credentials.DbName))
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8&parseTime=True&loc=Local", credentials.Username, credentials.Password, credentials.Host, credentials.DbName))
 	if err != nil {
 		panic(err)
 	}
