@@ -7,22 +7,19 @@ import (
 	"log"
 )
 
-var host, port = "localhost", "7777"
-
 func Run() {
 	dbConnection := orm.OpenDB()
 
 	router := gin.Default()
 	router.GET("/ping", handler.Ping)
 
-	endpoint := host + ":" + port
 
-	log.Printf("connect to http://%s/ for GraphQL playground", endpoint)
+	log.Printf("connect to for GraphQL playground")
 	router.GET("/", handler.Playground("/query"))
 	router.POST("/query", handler.QueryHandler(dbConnection))
 	router.OPTIONS("/query", handler.QueryHandler(dbConnection))
 
-	err := router.Run(endpoint)
+	err := router.Run(":7777")
 	if err != nil {
 		log.Fatalln(err)
 	}
